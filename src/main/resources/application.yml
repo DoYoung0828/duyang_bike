@@ -1,0 +1,75 @@
+#1、端口,路径配置
+server:
+    port: 8888
+    servlet:
+      context-path: /dy
+
+#2、Spring相关配置
+spring:
+    #2.1、应用程序名称
+    application:
+        name: bike
+
+    #2.2、profile:多环境配置(测试,开发,线上)
+    profiles:
+        active: dev
+
+    #2.3、数据源配置
+    datasource:
+         driver-class-name: com.mysql.jdbc.Driver
+         type: com.alibaba.druid.pool.DruidDataSource
+
+#3、Mybatis相关配置(xml和entity)
+mybatis:
+    mapper-locations: classpath:com/bike/**/**.xml
+    type-aliases-package: classpath:com.bike.**.entity
+
+#4、log日志相关配置(resources文件下)
+logging:
+    config: classpath:logback.xml
+
+
+
+
+
+
+#、Redis相关配置
+#redis:
+#    host: 127.0.0.1
+#    port: 6379
+#    #auth密码和redis.config设置的密码保持一致
+#    auth: duyang001
+#    max-idle: 5
+#    max-total: 10
+#    max-wait-millis: 3000
+
+
+#profile
+#    profiles:
+#        active: prod
+#datasource
+#    datasource:
+#        # druid
+#        type: com.alibaba.druid.pool.DruidDataSource
+#        driver-class-name: com.alibaba.druid.proxy.DruidDriver
+#        filters: stat
+#        maxActive: 20
+#        initialSize: 1
+#        maxWait: 60000
+#        minIdle: 1
+#        timeBetweenEvictionRunsMillis: 60000
+#        minEvictableIdleTimeMillis: 300000
+#        validationQuery: select 'x'
+#        testWhileIdle: true
+#        testOnBorrow: false
+#        testOnReturn: false
+#        poolPreparedStatements: true
+#        maxOpenPreparedStatements: 20
+
+
+
+#activeMQ  redis  mogo placed in dev or prod‘
+
+
+
+

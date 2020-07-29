@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bike.wallet.dao.WalletMapper">
+
+    <!--返回值,column对应实体类字段,property对应数据库字段-->
+    <resultMap id="BaseResultMap" type="com.bike.wallet.entity.Wallet">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="userid" property="userid" jdbcType="BIGINT"/>
+        <result column="remain_sum" property="remainSum" jdbcType="DECIMAL"/>
+        <result column="deposit" property="deposit" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <!--sql字段-->
+    <sql id="Base_Column_List">
+         id, userid, remain_sum, deposit
+    </sql>
+
+    <!--1、检查用户钱包余额是否足够(大于一元)-->
+    <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from wallet
+        where userid = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <!--2、钱包扣费-->
+    <update id="updateByPrimaryKeySelective" parameterType="com.bike.wallet.entity.Wallet">
+        update wallet
+        <set>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=BIGINT},
+            </if>
+            <if test="remainSum != null">
+                remain_sum = #{remainSum,jdbcType=DECIMAL},
+            </if>
+            <if test="deposit != null">
+                deposit = #{deposit,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from wallet
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from wallet
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.coder520.mamabike.wallet.entity.Wallet">
+    insert into wallet (id, userid, remain_sum, 
+      deposit)
+    values (#{id,jdbcType=BIGINT}, #{userid,jdbcType=BIGINT}, #{remainSum,jdbcType=DECIMAL}, 
+      #{deposit,jdbcType=DECIMAL})
+  </insert>
+    <insert id="insertSelective" parameterType="com.coder520.mamabike.wallet.entity.Wallet">
+        insert into wallet
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="remainSum != null">
+                remain_sum,
+            </if>
+            <if test="deposit != null">
+                deposit,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=BIGINT},
+            </if>
+            <if test="remainSum != null">
+                #{remainSum,jdbcType=DECIMAL},
+            </if>
+            <if test="deposit != null">
+                #{deposit,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.coder520.mamabike.wallet.entity.Wallet">
+    update wallet
+    set userid = #{userid,jdbcType=BIGINT},
+      remain_sum = #{remainSum,jdbcType=DECIMAL},
+      deposit = #{deposit,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

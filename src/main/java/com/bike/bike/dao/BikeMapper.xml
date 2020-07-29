@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.coder520.mamabike.bike.dao.BikeMapper">
+
+    <!--返回值,column对应实体类字段,property对应数据库字段-->
+    <resultMap id="BaseResultMap" type="com.bike.bike.dao.BikeMapper">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="number" property="number" jdbcType="BIGINT"/>
+        <result column="type" property="type" jdbcType="TINYINT"/>
+        <result column="enable_flag" property="enableFlag" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <!--sql字段-->
+    <sql id="Base_Column_List">
+         id, `number`, `type`, enable_flag
+    </sql>
+
+    <!--1、利用数据库自增特性,返回唯一ID作为单车编号-->
+    <insert id="generateBikeNo" parameterType="com.bike.bike.entity.BikeNoGen" useGeneratedKeys="true"
+            keyProperty="autoIncNo">
+        insert into auto_inc_no (what_ever) values (1)
+    </insert>
+
+    <!--2、生成单车-->
+    <insert id="insertSelective" parameterType="com.bike.bike.entity.Bike">
+        insert into bike
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="number != null">
+                number,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="enableFlag != null">
+                enable_flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=BIGINT},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="enableFlag != null">
+                #{enableFlag,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+    <!--3、查询单车类型-->
+    <select id="selectByBikeNo" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from bike
+        where number = #{bikeNo}
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from bike
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from bike
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.coder520.mamabike.bike.entity.Bike">
+    insert into bike (id, number, type, 
+      enable_flag)
+    values (#{id,jdbcType=BIGINT}, #{number,jdbcType=BIGINT}, #{type,jdbcType=TINYINT}, 
+      #{enableFlag,jdbcType=TINYINT})
+  </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.coder520.mamabike.bike.entity.Bike">
+        update bike
+        <set>
+            <if test="number != null">
+                number = #{number,jdbcType=BIGINT},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="enableFlag != null">
+                enable_flag = #{enableFlag,jdbcType=TINYINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.coder520.mamabike.bike.entity.Bike">
+    update bike
+    set number = #{number,jdbcType=BIGINT},
+      type = #{type,jdbcType=TINYINT},
+      enable_flag = #{enableFlag,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

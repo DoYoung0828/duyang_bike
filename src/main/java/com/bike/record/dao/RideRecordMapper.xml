@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bike.record.dao.RideRecordMapper">
+
+    <!--返回值,column对应实体类字段,property对应数据库字段-->
+    <resultMap id="BaseResultMap" type="com.bike.record.entity.RideRecord">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="userid" property="userid" jdbcType="BIGINT"/>
+        <result column="record_no" property="recordNo" jdbcType="VARCHAR"/>
+        <result column="bike_no" property="bikeNo" jdbcType="BIGINT"/>
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="ride_time" property="rideTime" jdbcType="INTEGER"/>
+        <result column="ride_cost" property="rideCost" jdbcType="DECIMAL"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <!--sql字段-->
+    <sql id="Base_Column_List">
+      id, userid, record_no, bike_no, start_time, end_time, ride_time, ride_cost, status
+    </sql>
+
+    <!--1、检查用户有没有未关闭的骑行记录-->
+    <select id="selectRecordNotClosed" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from ride_record
+        where userid = #{userId} AND status = 1
+    </select>
+
+    <!--2、建立订单,记录开始骑行时间-->
+    <insert id="insertSelective" parameterType="com.bike.record.entity.RideRecord">
+        insert into ride_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="recordNo != null">
+                record_no,
+            </if>
+            <if test="bikeNo != null">
+                bike_no,
+            </if>
+            <if test="startTime != null">
+                start_time,
+            </if>
+            <if test="endTime != null">
+                end_time,
+            </if>
+            <if test="rideTime != null">
+                ride_time,
+            </if>
+            <if test="rideCost != null">
+                ride_cost,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=BIGINT},
+            </if>
+            <if test="recordNo != null">
+                #{recordNo,jdbcType=VARCHAR},
+            </if>
+            <if test="bikeNo != null">
+                #{bikeNo,jdbcType=BIGINT},
+            </if>
+            <if test="startTime != null">
+                #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="rideTime != null">
+                #{rideTime,jdbcType=INTEGER},
+            </if>
+            <if test="rideCost != null">
+                #{rideCost,jdbcType=DECIMAL},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+    <!--3、结束订单,计算骑行时间存订单-->
+    <select id="selectBikeRecordOnGoing" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from ride_record
+        where bike_no = #{bikeNo} AND status = 1
+    </select>
+
+    <!--4、骑行结束,修改骑行状态相关信息-->
+    <update id="updateByPrimaryKeySelective" parameterType="com.bike.record.entity.RideRecord">
+        update ride_record
+        <set>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=BIGINT},
+            </if>
+            <if test="recordNo != null">
+                record_no = #{recordNo,jdbcType=VARCHAR},
+            </if>
+            <if test="bikeNo != null">
+                bike_no = #{bikeNo,jdbcType=BIGINT},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="rideTime != null">
+                ride_time = #{rideTime,jdbcType=INTEGER},
+            </if>
+            <if test="rideCost != null">
+                ride_cost = #{rideCost,jdbcType=DECIMAL},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <!--5、查询骑行历史-->
+    <select id="selectRideRecordPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ride_record
+        where userid = #{userId}
+        AND id > #{lastId}
+        AND status = 2
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from ride_record
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ride_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.bike.record.entity.RideRecord">
+    insert into ride_record (id, userid, record_no, 
+      bike_no, start_time, end_time, 
+      ride_time, ride_cost, status
+      )
+    values (#{id,jdbcType=BIGINT}, #{userid,jdbcType=BIGINT}, #{recordNo,jdbcType=VARCHAR}, 
+      #{bikeNo,jdbcType=BIGINT}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{rideTime,jdbcType=INTEGER}, #{rideCost,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}
+      )
+  </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.bike.record.entity.RideRecord">
+    update ride_record
+    set userid = #{userid,jdbcType=BIGINT},
+      record_no = #{recordNo,jdbcType=VARCHAR},
+      bike_no = #{bikeNo,jdbcType=BIGINT},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      ride_time = #{rideTime,jdbcType=INTEGER},
+      ride_cost = #{rideCost,jdbcType=DECIMAL},
+      status = #{status,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

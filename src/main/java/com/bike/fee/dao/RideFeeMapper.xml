@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bike.fee.dao.RideFeeMapper">
+
+    <!--返回值,column对应实体类字段,property对应数据库字段-->
+    <resultMap id="BaseResultMap" type="com.bike.fee.entity.RideFee">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="min_unit" property="minUnit" jdbcType="INTEGER"/>
+        <result column="fee" property="fee" jdbcType="DECIMAL"/>
+        <result column="bike_type" property="bikeType" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <!--sql字段-->
+    <sql id="Base_Column_List">
+         id, min_unit, fee, bike_type
+    </sql>
+
+    <!--1、查询计价信息-->
+    <select id="selectBikeTypeFee" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ride_fee
+        where bike_type = #{type}
+    </select>
+
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from ride_fee
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ride_fee
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.coder520.mamabike.fee.entity.RideFee">
+    insert into ride_fee (id, min_unit, fee, 
+      bike_type)
+    values (#{id,jdbcType=BIGINT}, #{minUnit,jdbcType=INTEGER}, #{fee,jdbcType=DECIMAL}, 
+      #{bikeType,jdbcType=TINYINT})
+  </insert>
+    <insert id="insertSelective" parameterType="com.coder520.mamabike.fee.entity.RideFee">
+        insert into ride_fee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="minUnit != null">
+                min_unit,
+            </if>
+            <if test="fee != null">
+                fee,
+            </if>
+            <if test="bikeType != null">
+                bike_type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="minUnit != null">
+                #{minUnit,jdbcType=INTEGER},
+            </if>
+            <if test="fee != null">
+                #{fee,jdbcType=DECIMAL},
+            </if>
+            <if test="bikeType != null">
+                #{bikeType,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.coder520.mamabike.fee.entity.RideFee">
+        update ride_fee
+        <set>
+            <if test="minUnit != null">
+                min_unit = #{minUnit,jdbcType=INTEGER},
+            </if>
+            <if test="fee != null">
+                fee = #{fee,jdbcType=DECIMAL},
+            </if>
+            <if test="bikeType != null">
+                bike_type = #{bikeType,jdbcType=TINYINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.coder520.mamabike.fee.entity.RideFee">
+    update ride_fee
+    set min_unit = #{minUnit,jdbcType=INTEGER},
+      fee = #{fee,jdbcType=DECIMAL},
+      bike_type = #{bikeType,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

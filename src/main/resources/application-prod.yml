@@ -1,0 +1,26 @@
+#spring:
+#  datasource:
+#     name: prod
+#     url: jdbc:mysql://mysql-kangjian.v2.tenxapp.com:36427/mama-bike
+#     username: root
+#     password: tenxcloud
+#
+##activeMQ
+#  activemq:
+#      broker-url: tcp://activemq-kangjian.v2.tenxapp.com:11890
+#      pool:
+#        enabled: false
+##springdata
+#  data:
+#     # mongoDB    #mongodb note:mongo3.x will not use host and port,only use uri
+#    mongodb:
+#      uri: mongodb://mongodb-kangjian.v2.tenxapp.com:19109/mama-bike
+#
+##reids
+#redis:
+#    host: redis-kangjian.v2.tenxapp.com
+#    port: 51920
+#    auth: kangjian
+#    max-idle: 5
+#    max-total: 10
+#    max-wait-millis: 3000
