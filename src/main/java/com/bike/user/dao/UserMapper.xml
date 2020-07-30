@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bike.user.dao.UserMapper">
 
-    <!--返回值,column对应实体类字段,property对应数据库字段-->
+    <!--映射关系,返回值,column数据库字段,property实体类字段-->
+    <!--绑定数据库字段和实体类字段不需要统一-->
     <resultMap id="BaseResultMap" type="com.bike.user.entity.User">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
@@ -102,29 +103,30 @@
         where id = #{id,jdbcType=BIGINT}
     </select>
 
-    <!--<update id="updateByPrimaryKey" parameterType="com.bike.user.entity.User">-->
-    <!--update user-->
-    <!--set nickname = #{nickname,jdbcType=VARCHAR},-->
-    <!--mobile = #{mobile,jdbcType=VARCHAR},-->
-    <!--head_img = #{headImg,jdbcType=VARCHAR},-->
-    <!--verify_flag = #{verifyFlag,jdbcType=TINYINT},-->
-    <!--enable_flag = #{enableFlag,jdbcType=TINYINT}-->
-    <!--where id = #{id,jdbcType=BIGINT}-->
-    <!--</update>-->
 
 
-    <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">-->
-    <!--delete from user-->
-    <!--where id = #{id,jdbcType=BIGINT}-->
-    <!--</delete>-->
-    <!---->
-    <!--<insert id="insert" parameterType="com.bike.user.entity.User">-->
-    <!--insert into user (id, nickname, mobile, -->
-    <!--head_img, verify_flag, enable_flag-->
-    <!--)-->
-    <!--values (#{id,jdbcType=BIGINT}, #{nickname,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, -->
-    <!--#{headImg,jdbcType=VARCHAR}, #{verifyFlag,jdbcType=TINYINT}, #{enableFlag,jdbcType=TINYINT}-->
-    <!--)-->
-    <!--</insert>-->
+    <update id="updateByPrimaryKey" parameterType="com.bike.user.entity.User">
+    update user
+    set nickname = #{nickname,jdbcType=VARCHAR},
+    mobile = #{mobile,jdbcType=VARCHAR},
+    head_img = #{headImg,jdbcType=VARCHAR},
+    verify_flag = #{verifyFlag,jdbcType=TINYINT},
+    enable_flag = #{enableFlag,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from user
+    where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" parameterType="com.bike.user.entity.User">
+    insert into user (id, nickname, mobile,
+    head_img, verify_flag, enable_flag
+    )
+    values (#{id,jdbcType=BIGINT}, #{nickname,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR},
+    #{headImg,jdbcType=VARCHAR}, #{verifyFlag,jdbcType=TINYINT}, #{enableFlag,jdbcType=TINYINT}
+    )
+    </insert>
 
 </mapper>

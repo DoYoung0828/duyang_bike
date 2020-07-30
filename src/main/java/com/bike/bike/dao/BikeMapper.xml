@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.coder520.mamabike.bike.dao.BikeMapper">
+<mapper namespace="com.bike.bike.dao.BikeMapper">
 
-    <!--返回值,column对应实体类字段,property对应数据库字段-->
-    <resultMap id="BaseResultMap" type="com.bike.bike.dao.BikeMapper">
+    <!--映射关系,返回值,column数据库字段,property实体类字段-->
+    <resultMap id="BaseResultMap" type="com.bike.bike.entity.Bike">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="number" property="number" jdbcType="BIGINT"/>
         <result column="type" property="type" jdbcType="TINYINT"/>
@@ -74,14 +74,14 @@
     delete from bike
     where id = #{id,jdbcType=BIGINT}
   </delete>
-    <insert id="insert" parameterType="com.coder520.mamabike.bike.entity.Bike">
+    <insert id="insert" parameterType="com.bike.bike.entity.Bike">
     insert into bike (id, number, type, 
       enable_flag)
     values (#{id,jdbcType=BIGINT}, #{number,jdbcType=BIGINT}, #{type,jdbcType=TINYINT}, 
       #{enableFlag,jdbcType=TINYINT})
   </insert>
 
-    <update id="updateByPrimaryKeySelective" parameterType="com.coder520.mamabike.bike.entity.Bike">
+    <update id="updateByPrimaryKeySelective" parameterType="com.bike.bike.entity.Bike">
         update bike
         <set>
             <if test="number != null">
@@ -96,7 +96,7 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.coder520.mamabike.bike.entity.Bike">
+    <update id="updateByPrimaryKey" parameterType="com.bike.bike.entity.Bike">
     update bike
     set number = #{number,jdbcType=BIGINT},
       type = #{type,jdbcType=TINYINT},

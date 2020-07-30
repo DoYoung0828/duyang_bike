@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.bike.fee.dao.RideFeeMapper">
 
-    <!--返回值,column对应实体类字段,property对应数据库字段-->
+    <!--映射关系,返回值,column数据库字段,property实体类字段-->
     <resultMap id="BaseResultMap" type="com.bike.fee.entity.RideFee">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="min_unit" property="minUnit" jdbcType="INTEGER"/>
@@ -24,6 +24,7 @@
     </select>
 
 
+
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
@@ -34,13 +35,13 @@
     delete from ride_fee
     where id = #{id,jdbcType=BIGINT}
   </delete>
-    <insert id="insert" parameterType="com.coder520.mamabike.fee.entity.RideFee">
+    <insert id="insert" parameterType="com.bike.fee.entity.RideFee">
     insert into ride_fee (id, min_unit, fee, 
       bike_type)
     values (#{id,jdbcType=BIGINT}, #{minUnit,jdbcType=INTEGER}, #{fee,jdbcType=DECIMAL}, 
       #{bikeType,jdbcType=TINYINT})
   </insert>
-    <insert id="insertSelective" parameterType="com.coder520.mamabike.fee.entity.RideFee">
+    <insert id="insertSelective" parameterType="com.bike.fee.entity.RideFee">
         insert into ride_fee
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -71,7 +72,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.coder520.mamabike.fee.entity.RideFee">
+    <update id="updateByPrimaryKeySelective" parameterType="com.bike.fee.entity.RideFee">
         update ride_fee
         <set>
             <if test="minUnit != null">
@@ -86,7 +87,7 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.coder520.mamabike.fee.entity.RideFee">
+    <update id="updateByPrimaryKey" parameterType="com.bike.fee.entity.RideFee">
     update ride_fee
     set min_unit = #{minUnit,jdbcType=INTEGER},
       fee = #{fee,jdbcType=DECIMAL},
